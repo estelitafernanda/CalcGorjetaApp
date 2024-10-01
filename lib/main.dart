@@ -11,148 +11,126 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: "calculadora"),
-      routes: <String, WidgetBuilder>{
-        '/': (BuildContext context){
-          return const MyHomePage(title: "calculadora");
-        },
-        '/telapreencher': (BuildContext context){
-          return const SegundaTela();
-        }
-      },
+      debugShowCheckedModeBanner: false,
+      home: ScaffoldHome(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class ScaffoldHome extends StatelessWidget{
+    const ScaffoldHome({super.key});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "Calcula gorjeta",
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          backgroundColor: Colors.grey.shade400,
+          centerTitle: true,
+        ),
+        backgroundColor: Colors.grey.shade50,
+        body: HomeBody(),
+      );
+    }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class HomeBody extends StatefulWidget{
+  const HomeBody({super.key});
+
+  @override
+  State<HomeBody> createState() => _HomeBodyState();
+}
+
+class _HomeBodyState extends State<HomeBody> {
+  late double _resultado;
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    _resultado = 0;
+    _controller = TextEditingController();
+    super.initState();
+  }
+  void calcula(){
+    setState(() {
+      _resultado = double.parse(_controller.value.text)*1.1;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Container(
-          width: 300,
-          height: 300,
-          color: Colors.blue,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("X"),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(context, '/telapreencher'),
-                    child: const Text("Informar X"),
-                  ),
-                ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 150,
+          height: 150,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: const DecorationImage(
+              fit: BoxFit.fitHeight,
+              image: AssetImage(
+                "imagens/tip.png",
+            ),
+          ),
+          border: Border.all(
+            width: 10,
+            color: Colors.black 
+            )),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: TextField(
+            controller: _controller,
+            keyboardType: TextInputType.number,
+            onChanged: (value) => calcula(),
+            decoration: InputDecoration(
+              hintText: "Digite o valor da sua conta",
+              fillColor: Colors.white,
+              filled: true,
+              prefixIcon: Icon(
+                Icons.monetization_on_outlined,
               ),
-              Row (
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Y"),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pushNamed(context, '/telapreencher'),
-                    child: const Text("Informar Y"),
-                  ),
-                ],
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 2, color: Colors.grey.shade800,
+                ),
+                borderRadius: BorderRadius.circular(8),
               ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: null,
-                    child: Text("Calcular"),
-                  ),
-                ],
-              ),
-              const Text("Resultado:"),
-            ],
+            ),
           ),
         ),
-      ),// This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
-
-class SegundaTela extends StatelessWidget {
-  const SegundaTela({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Preenche Valores"),
-        backgroundColor: Colors.amberAccent,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text("X"),
-          TextButton(
-            onPressed: null,
-           child: Text("Digite um valor:")
+        /*ElevatedButton(
+          onPressed: () => null,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.grey.shade600,
+            elevation: 5,
           ),
-          ElevatedButton(
-            onPressed: null,
-           child: Text("Ok")
-          )
-        ],
-      )
+           child: const Text(
+            "Calcular",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),*/
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child:  Text(
+            "R\$ ${_resultado.toStringAsFixed(2)}",
+            style: TextStyle(
+              color: Colors.grey.shade700,
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
