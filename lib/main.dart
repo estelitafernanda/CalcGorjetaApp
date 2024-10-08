@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/widgets/imagem_logo.dart';
+import 'package:flutter_application_1/widgets/text_input_dinheiro.dart';
+import 'package:flutter_application_1/widgets/text_resultado.dart';
 
 void main() {
   runApp(const MyApp());
@@ -68,44 +71,8 @@ class _HomeBodyState extends State<HomeBody> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: const DecorationImage(
-              fit: BoxFit.fitHeight,
-              image: AssetImage(
-                "imagens/tip.png",
-            ),
-          ),
-          border: Border.all(
-            width: 10,
-            color: Colors.black 
-            )),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: TextField(
-            controller: _controller,
-            keyboardType: TextInputType.number,
-            onChanged: (value) => calcula(),
-            decoration: InputDecoration(
-              hintText: "Digite o valor da sua conta",
-              fillColor: Colors.white,
-              filled: true,
-              prefixIcon: Icon(
-                Icons.monetization_on_outlined,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  width: 2, color: Colors.grey.shade800,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-        ),
+        ImagemLogo(),
+        TextInputDinheiro(controller: _controller, calcula: (value) => calcula(),),
         /*ElevatedButton(
           onPressed: () => null,
           style: ElevatedButton.styleFrom(
@@ -119,18 +86,13 @@ class _HomeBodyState extends State<HomeBody> {
             ),
           ),
         ),*/
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child:  Text(
-            "R\$ ${_resultado.toStringAsFixed(2)}",
-            style: TextStyle(
-              color: Colors.grey.shade700,
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+        TextResultado(resultado: _resultado),
       ],
     );
   }
 }
+
+
+
+
+
